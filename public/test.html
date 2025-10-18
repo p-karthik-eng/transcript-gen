@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>YouTube Transcript Test</title>
+</head>
+<body>
+<h1>YouTube Transcript Generator</h1>
+
+<input type="text" id="videoUrl" placeholder="Paste YouTube URL" size="50" />
+<button onclick="getTranscript()">Get Transcript</button>
+
+<pre id="output"></pre>
+
+<script>
+async function getTranscript() {
+  const videoUrl = document.getElementById("videoUrl").value;
+  const output = document.getElementById("output");
+  output.textContent = "Loading...";
+
+  try {
+    const res = await fetch("/api/get-transcript", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ videoUrl })
+    });
+    const data = await res.json();
+    output.textContent = JSON.stringify(data, null, 2);
+  } catch (err) {
+    output.textContent = "Error: " + err.message;
+  }
+}
+</script>
+</body>
+</html>
